@@ -140,6 +140,19 @@ def get(url, **kwargs):
     return __dorequest("GET", url, {}, kwargs.get(HEADERS_KEY, {}), kwargs.get(AUTH_KEY, None), kwargs.get(CALLBACK_KEY, None))
 
 
+def head(url, **kwargs):
+    # same as GET except different method name
+    params = get_parameters(kwargs)
+    if len(params) > 0:
+        if url.find("?") == -1:
+            url += "?"
+        else:
+            url += "&"
+        url += utils.dict2query(dict((k, v) for k, v in params.iteritems() if v is not None))  # Removing None values/encode unicode objects
+
+    return __dorequest("HEAD", url, {}, kwargs.get(HEADERS_KEY, {}), kwargs.get(AUTH_KEY, None), kwargs.get(CALLBACK_KEY, None))
+
+
 def post(url, **kwargs):
     return __dorequest("POST", url, get_parameters(kwargs), kwargs.get(HEADERS_KEY, {}), kwargs.get(AUTH_KEY, None), kwargs.get(CALLBACK_KEY, None))
 
